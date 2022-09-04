@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by LaunchCode
@@ -74,12 +75,13 @@ public class JobData {
         loadData();
 
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        String caseInsensitiveValue = value.toLowerCase();
 
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(caseInsensitiveValue)) {
                 jobs.add(row);
             }
         }
@@ -97,9 +99,25 @@ public class JobData {
 
         // load data, if not already loaded
         loadData();
+        ArrayList<HashMap<String,String>> results = new ArrayList<>();
+        String caseInsensitiveValue = value.toLowerCase();
 
-        // TODO - implement this method
-        return null;
+        for(int i=0; i< allJobs.size(); i++) {
+            for (Map.Entry<String, String> row : allJobs.get(i).entrySet()) {
+                String column = row.getKey();
+                String searchValue = row.getValue();
+
+                if (searchValue.toLowerCase().contains(caseInsensitiveValue) || column.toLowerCase().contains(caseInsensitiveValue)) {
+                    if(results.contains(searchValue) || results.contains(column)){
+                        break;
+                    } else {
+                        results.add(allJobs.get(i));
+                    }
+                }
+            }
+        }
+
+        return results;
     }
 
     /**
